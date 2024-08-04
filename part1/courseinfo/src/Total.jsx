@@ -1,7 +1,13 @@
 const Total = (props) => {
+    const totalExercises = (exercises) => {
+        return exercises.reduce((accumulator, currentValue) => {
+            return accumulator + currentValue
+          },0);
+    }
+
     return(
         <>
-            <p>Number of exercises {props.exercises[0] + props.exercises[1] + props.exercises[2]}</p>
+            <p>Number of exercises {totalExercises(props.exercises)}</p>
         </>
     )
 }
