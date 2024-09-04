@@ -23,9 +23,9 @@ const App = () => {
         handleBad={handleBad}
       />
       <Statistics 
-        good={good}         
-        neutral={neutral} 
-        bad={bad}         
+        good={good}
+        neutral={neutral}
+        bad={bad}
       />
     </div>
   )

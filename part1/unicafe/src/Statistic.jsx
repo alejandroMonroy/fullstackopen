@@ -1,7 +1,7 @@
 const Statistic = (props) => {
     return (
         <>
-            <p>{props.name} {props.counter}</p>
+            <p>{props.name} {props.counter} {props.units}</p>
         </>
     )
 }
