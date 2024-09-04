@@ -13,14 +13,16 @@ const Statistics = (props) => {
                 <p>No feedback given</p>
             </> 
             :
-            <>
-                <StatisticLine text='good' value={props.good}/>
-                <StatisticLine text='neutral' value={props.neutral}/>
-                <StatisticLine text='bad' value={props.bad}/>
-                <StatisticLine text='all' value={all}/>
-                <StatisticLine text='average' value={average}/>
-                <StatisticLine text='postivie' value={positive} units='%'/>
-            </>
+            <table>
+                <tbody>
+                    <StatisticLine text='good' value={props.good}/>
+                    <StatisticLine text='neutral' value={props.neutral}/>
+                    <StatisticLine text='bad' value={props.bad}/>
+                    <StatisticLine text='all' value={all}/>
+                    <StatisticLine text='average' value={average}/>
+                    <StatisticLine text='postivie' value={positive} units='%'/>
+                </tbody>
+            </table >
         )
     }
 
