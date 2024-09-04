@@ -1,9 +1,9 @@
-const Feedback = () => {
+const Feedback = (props) => {
     return(
         <>
-            <button>good</button>
-            <button>neutral</button>
-            <button>bad</button>
+            <button onClick={props.handleGood}>good</button>
+            <button onClick={props.handleNeutral}>neutral</button>
+            <button onClick={props.handleBad}>bad</button>
         </>
     )
 }
