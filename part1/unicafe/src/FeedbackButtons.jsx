@@ -1,4 +1,4 @@
-const Feedback = (props) => {
+const FeedbackButtons = (props) => {
     return(
         <>
             <button onClick={props.handleGood}>good</button>
@@ -8,4 +8,4 @@ const Feedback = (props) => {
     )
 }
 
-export default Feedback
+export default FeedbackButtons

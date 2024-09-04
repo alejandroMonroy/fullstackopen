@@ -1,5 +1,5 @@
 import { useState } from "react"
-import Feedback from "./Feedback"
+import FeedbackButtons from "./FeedbackButtons"
 import Header from "./Header"
 import Statistics from "./Statistics"
 
@@ -17,7 +17,7 @@ const App = () => {
   return (
     <div>
       <Header />
-      <Feedback 
+      <FeedbackButtons 
         handleGood={handleGood}
         handleNeutral={handleNeutral} 
         handleBad={handleBad}
