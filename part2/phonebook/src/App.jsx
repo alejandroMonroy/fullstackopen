@@ -22,7 +22,7 @@ const App = () => {
   const addPerson = (event) => {
     event.preventDefault()
     if (persons.find(person => person.name == newName) === undefined) {      
-      const newPerson = {name: newName, number: newPhone, id: (persons[persons.length-1].id +1)}
+      const newPerson = {name: newName, number: newPhone}
       personsService.create(newPerson).then(newPerson => {
         setPersons(persons.concat(newPerson))
         setNewName('')
@@ -45,14 +45,36 @@ const App = () => {
     setNewFilter(event.target.value)
   }
 
+  const handleDeletePerson = person => {
+    if(window.confirm(`Delete ${person.name}?`)){
+      personsService.deletePerson(person)
+      .then(deletedPerson => {
+        setPersons(persons.filter(person => person.id !== deletedPerson.id))
+      })
+    }
+  }
+
   return (
     <div>
       <h2>Phonebook</h2>
-      <Filter value={newFilter} onChange={handleFilterChange}/>
+      <Filter 
+        value={newFilter}
+        onChange={handleFilterChange}
+      />
       <h3>add a new</h3>
-      <PersonForm addPerson={addPerson} newName={newName} handleNameChange={handleNameChange} newPhone={newPhone} handlePhoneChange={handlePhoneChange}/>
+      <PersonForm
+        addPerson={addPerson} 
+        newName={newName} 
+        handleNameChange={handleNameChange} 
+        newPhone={newPhone} 
+        handlePhoneChange={handlePhoneChange}
+      />
       <h3>Numbers</h3>
-      <Persons persons={persons} newFilter={newFilter}/>
+      <Persons 
+        persons={persons} 
+        newFilter={newFilter} 
+        onDelete={handleDeletePerson}
+      />
     </div>
   )
 }
