@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 
 import Filter from './Filter'
+import Notification from './Notification'
 import PersonForm from './PersonForm'
 import Persons from './Persons'
 import personsService from './services/persons.js'
@@ -10,6 +11,8 @@ const App = () => {
   const [newName, setNewName] = useState('')
   const [newPhone, setNewPhone] = useState('')
   const [newFilter, setNewFilter] = useState('')
+  const [notificationMessage, setNotificationMessage] = useState(null) 
+  const [isError, setNotificationIsError] = useState(false)
 
   useEffect(() => {
     personsService
@@ -28,12 +31,34 @@ const App = () => {
         setPersons(persons.concat(newPerson))
         setNewName('')
         setNewPhone('')
+        setNotificationIsError(false)
+        setNotificationMessage(`Added ${newPerson.name}`)        
+        setTimeout(() => {
+          setNotificationMessage(null)
+        }, 5000)
+      }).catch(()=>{
+        setNotificationIsError(true)
+        setNotificationMessage(`Error adding ${newPerson.name}`)        
+        setTimeout(() => {
+          setNotificationMessage(null)
+        }, 5000)
       })
     }else{
       if(window.confirm(`${searchedPerson.name} is already added to phonebook, replace the old number with a new one?`)){
         const updatedPerson = {...searchedPerson, number: newPhone}
         personsService.updatePerson(updatedPerson).then(newPerson => {        
           setPersons(persons.map((person) => person.id === newPerson.id ? updatedPerson : person))
+          setNotificationIsError(false)
+          setNotificationMessage(`Updated ${newPerson.name}`)        
+          setTimeout(() => {
+            setNotificationMessage(null)
+          }, 5000)
+        }).catch(()=>{
+          setNotificationIsError(true)
+          setNotificationMessage(`Error updating ${searchedPerson.name}`)        
+          setTimeout(() => {
+            setNotificationMessage(null)
+          }, 5000)
         })
       }
       setNewName('')
@@ -58,6 +83,17 @@ const App = () => {
       personsService.deletePerson(person)
       .then(deletedPerson => {
         setPersons(persons.filter(person => person.id !== deletedPerson.id))
+        setNotificationIsError(false)
+        setNotificationMessage(`Deleted ${deletedPerson.name}`)        
+        setTimeout(() => {
+          setNotificationMessage(null)
+        }, 5000)
+      }).catch(()=>{
+        setNotificationIsError(true)
+        setNotificationMessage(`Error deleting ${person.name}`)        
+        setTimeout(() => {
+          setNotificationMessage(null)
+        }, 5000)
       })
     }
   }
@@ -65,6 +101,7 @@ const App = () => {
   return (
     <div>
       <h2>Phonebook</h2>
+      <Notification message={notificationMessage} isError={isError}/>
       <Filter 
         value={newFilter}
         onChange={handleFilterChange}
