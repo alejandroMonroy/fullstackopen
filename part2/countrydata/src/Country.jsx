@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react"
 
 import axios from "axios"
+import Weather from "./Weather"
 
 const Country = ({name}) => {
     const [country, setCountry] = useState(null)
@@ -25,6 +26,7 @@ const Country = ({name}) => {
                 {Object.values(country.languages).map(language => <li key={language}>{language}</li>)}
             </ul>
             <img src={country.flags.png}/>
+            <Weather name={country.name.common} lat={country.latlng[0]} lon={country.latlng[1]}/>
         </>
         : <p>Loading...</p>
     )
