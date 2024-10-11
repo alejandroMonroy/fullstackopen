@@ -78,19 +78,19 @@ const App = () => {
     setNewFilter(event.target.value)
   }
 
-  const handleDeletePerson = person => {
-    if(window.confirm(`Delete ${person.name}?`)){
-      personsService.deletePerson(person)
-      .then(deletedPerson => {
-        setPersons(persons.filter(person => person.id !== deletedPerson.id))
+  const handleDeletePerson = personToDelete => {
+    if(window.confirm(`Delete ${personToDelete.name}?`)){
+      personsService.deletePerson(personToDelete)
+      .then(() => {
+        setPersons(persons.filter(person => person.id !== personToDelete.id))
         setNotificationIsError(false)
-        setNotificationMessage(`Deleted ${deletedPerson.name}`)        
+        setNotificationMessage(`Deleted ${personToDelete.name}`)        
         setTimeout(() => {
           setNotificationMessage(null)
         }, 5000)
       }).catch(()=>{
         setNotificationIsError(true)
-        setNotificationMessage(`Error deleting ${person.name}`)        
+        setNotificationMessage(`Error deleting ${personToDelete.name}`)        
         setTimeout(() => {
           setNotificationMessage(null)
         }, 5000)
