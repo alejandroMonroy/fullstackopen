@@ -50,7 +50,7 @@ app.post('/api/persons', (request, response, next) => {
 
     Person.findOne({ name: new RegExp(`^${body.name}$`, 'i') }).then(person => {
       if (person) {
-        person.number = number;
+        person.number = body.number;
         const updatedPerson = person.save();
         return response.status(200).json(updatedPerson);
       } else {
