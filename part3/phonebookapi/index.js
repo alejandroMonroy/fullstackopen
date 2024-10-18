@@ -1,17 +1,37 @@
 const express = require('express')
 const app = express()
 var morgan = require('morgan')
+
 require('dotenv').config()
 
-app.use(express.json())
+const Person = require('./models/person')
+
+
+app.use(express.static('dist'))
+
+const errorHandler = (error, request, response, next) => {
+  console.error(error.message)
+  
+  if (error.name === 'CastError') {
+    return response.status(400).send({ error: 'malformatted id' })
+  } else if (error.name === 'ValidationError') {
+    return response.status(400).json({ error: error.message })
+  }
+  
+  next(error)
+}
 
 const cors = require('cors')
 
 app.use(cors())
-const Person = require('./models/person')
-
+app.use(express.json())
 morgan.token('body', req => JSON.stringify(req.body))
 app.use(morgan(':method :url :status :res[content-length] - :response-time ms :body'))
+
+
+const unknownEndpoint = (request, response) => {
+  response.status(404).send({ error: 'unknown endpoint' })
+}
 
 app.get('/api/persons', (request, response, next) => {
   Person.find({}).then(persons => {
@@ -40,29 +60,23 @@ app.delete('/api/persons/:id', (request, response, next) => {
 })
 
 app.post('/api/persons', (request, response, next) => {
-    const body = request.body
-  
-    if (!body.name || !body.number) {
-      return response.status(400).json({ 
-        error: 'name and number are mandatory fields' 
-      })
-    }
+    const { name, number } = request.body
 
-    Person.findOne({ name: new RegExp(`^${body.name}$`, 'i') }).then(person => {
+    Person.findOne({ name: new RegExp(`^${name}$`, 'i') }).then(person => {
       if (person) {
-        person.number = body.number;
+        person.number = number;
         person.save().then(savedPerson => {
           response.status(202).json(savedPerson)
-        }) ;
+        }).catch(error => next(error));
       } else {
         const newPerson = new Person ({
-          name: body.name,
-          number: body.number,
+          name: name,
+          number: number,
         })
       
         newPerson.save().then(savedPerson => {
           response.status(201).json(savedPerson)
-        })      
+        }).catch(error => next(error))
       }
     })
     .catch(error => next(error))
@@ -70,36 +84,25 @@ app.post('/api/persons', (request, response, next) => {
 })
 
 app.put('/api/persons/:id', (request, response, next) => {
-  const body = request.body
+  const { name, number } = request.body
 
   const person = {
-    name: body.name,
-    number: body.number,
+    name: name,
+    number: number,
   }
 
-  Person.findByIdAndUpdate(request.params.id, person, { new: true })
+  Person.findByIdAndUpdate(
+    request.params.id, 
+    person, 
+    { new: true, runValidators: true, context: 'query' }
+  )
     .then(updatedNote => {
       response.json(updatedNote)
     })
     .catch(error => next(error))
 })
 
-const unknownEndpoint = (request, response) => {
-  response.status(404).send({ error: 'unknown endpoint' })
-}
-
 app.use(unknownEndpoint)
-
-const errorHandler = (error, request, response, next) => {
-  console.error(error.message)
-
-  if (error.name === 'CastError') {
-    return response.status(400).send({ error: 'malformatted id' })
-  } 
-
-  next(error)
-}
-
 app.use(errorHandler)
   
 const PORT = process.env.PORT

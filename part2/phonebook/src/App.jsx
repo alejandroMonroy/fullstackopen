@@ -36,9 +36,9 @@ const App = () => {
         setTimeout(() => {
           setNotificationMessage(null)
         }, 5000)
-      }).catch(()=>{
+      }).catch(error=>{
         setNotificationIsError(true)
-        setNotificationMessage(`Error adding ${newPerson.name}`)        
+        setNotificationMessage(error.response.data.error)        
         setTimeout(() => {
           setNotificationMessage(null)
         }, 5000)
@@ -53,9 +53,9 @@ const App = () => {
           setTimeout(() => {
             setNotificationMessage(null)
           }, 5000)
-        }).catch(()=>{
+        }).catch(error=>{
           setNotificationIsError(true)
-          setNotificationMessage(`Error updating ${searchedPerson.name}`)        
+          setNotificationMessage(error.response.data.error)        
           setTimeout(() => {
             setNotificationMessage(null)
           }, 5000)
@@ -88,9 +88,9 @@ const App = () => {
         setTimeout(() => {
           setNotificationMessage(null)
         }, 5000)
-      }).catch(()=>{
+      }).catch(error=>{
         setNotificationIsError(true)
-        setNotificationMessage(`Error deleting ${personToDelete.name}`)        
+        setNotificationMessage(error.response.data.error)        
         setTimeout(() => {
           setNotificationMessage(null)
         }, 5000)
