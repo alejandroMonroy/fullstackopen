@@ -27,10 +27,29 @@ const mostBlogs = (blogs) => {
       blogs: authorCount[mostBlogsAuthor]
     };
   };
+
+  const mostLikes = (blogs) => {
+    if (blogs.length === 0) return null;
+  
+    const authorLikes = {};
+    blogs.forEach(blog => {
+      authorLikes[blog.author] = (authorLikes[blog.author] || 0) + blog.likes;
+    });
+  
+    const mostLikesAuthor = Object.keys(authorLikes).reduce((a, b) =>
+      authorLikes[a] > authorLikes[b] ? a : b
+    );
+  
+    return {
+      author: mostLikesAuthor,
+      likes: authorLikes[mostLikesAuthor]
+    };
+  };
   
 module.exports = {
     dummy,
     totalLikes,
     favoriteBlog,
-    mostBlogs
+    mostBlogs,
+    mostLikes
 }

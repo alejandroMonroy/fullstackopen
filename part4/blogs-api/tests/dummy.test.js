@@ -86,7 +86,7 @@ describe('total likes', () => {
         const result = listHelper.totalLikes(blogs)
         assert.strictEqual(result, 36)
       })
-  })
+})
 
 describe('favorite blog', () => {
     const sameLikesBlogs = [
@@ -185,9 +185,9 @@ describe('favorite blog', () => {
             __v: 0
           })
       })
-  })
+})
 
-  describe('author with most blogs', () => {
+describe('author with most blogs', () => {
     const sameBlogs = [
         {
           _id: "5a422a851b54a676234d17f7",
@@ -276,4 +276,72 @@ describe('favorite blog', () => {
             blogs: 3,
           })
       })
+})
+
+describe('author with most likes', () => {
+  const blogs = [
+      {
+        _id: "5a422a851b54a676234d17f7",
+        title: "React patterns",
+        author: "Michael Chan",
+        url: "https://reactpatterns.com/",
+        likes: 7,
+        __v: 0
+      },
+      {
+        _id: "5a422aa71b54a676234d17f8",
+        title: "Go To Statement Considered Harmful",
+        author: "Edsger W. Dijkstra",
+        url: "http://www.u.arizona.edu/~rubinson/copyright_violations/Go_To_Considered_Harmful.html",
+        likes: 5,
+        __v: 0
+      }];
+
+      const sameLikes = [
+        {
+          _id: "5a422a851b54a676234d17f7",
+          title: "React patterns",
+          author: "Michael Chan",
+          url: "https://reactpatterns.com/",
+          likes: 7,
+          __v: 0
+        },
+        {
+          _id: "5a422aa71b54a676234d17f8",
+          title: "Go To Statement Considered Harmful",
+          author: "Edsger W. Dijkstra",
+          url: "http://www.u.arizona.edu/~rubinson/copyright_violations/Go_To_Considered_Harmful.html",
+          likes: 5,
+          __v: 0
+        },
+        {
+          _id: "5a422b3a1b54a676234d17f9",
+          title: "Canonical string reduction",
+          author: "Robert C. Martin",
+          url: "http://www.cs.utexas.edu/~EWD/transcriptions/EWD08xx/EWD808.html",
+          likes: 7,
+          __v: 0
+        }
+      ];
+
+test('of empty list is zero', () => {
+      const result = listHelper.mostLikes([])
+      assert.deepStrictEqual(result, null)
+    })
+   
+  test('with same likes is the last one', () => {
+      const result = listHelper.mostLikes(sameLikes)
+      assert.deepStrictEqual(result, {
+          author: "Robert C. Martin",
+          likes: 7,
+        },)
+    })
+
+  test('is calculated right', () => {
+    const result = listHelper.mostLikes(blogs)
+    assert.deepStrictEqual(result, {
+        author: "Michael Chan",
+        likes: 7,
+      })
   })
+})
